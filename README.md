@@ -4,7 +4,7 @@
 
 ## 🌐 Live Demo
 
-**🚀 Рабочее приложение:** [https://ваш-сайт.com/admin/polyathlon](https://ваш-сайт.com/admin/polyathlon)
+**🚀 Рабочее приложение:** https://supernatural-spooky-spirit-5g77qxxg67pjcpxx5-5226.app.github.dev/
 
 **📍 Локальный запуск:** `https://localhost:7000/admin/polyathlon`
 
