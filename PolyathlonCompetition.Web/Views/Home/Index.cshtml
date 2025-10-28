@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Система организации соревнований по полиатлону</h1>
+    <p>Добро пожаловать в систему управления соревнованиями по полиатлону.</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Участники</h5>
+                    <p class="card-text">Управление списком участников соревнований</p>
+                    <a asp-controller="Competitors" asp-action="Index" class="btn btn-primary">Перейти</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Соревнования</h5>
+                    <p class="card-text">Создание и управление соревнованиями</p>
+                    <a asp-controller="Competitions" asp-action="Index" class="btn btn-primary">Перейти</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Результаты</h5>
+                    <p class="card-text">Ввод и просмотр результатов</p>
+                    <a href="#" class="btn btn-secondary">Скоро</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

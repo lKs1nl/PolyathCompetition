@@ -1,0 +1,122 @@
+@model IEnumerable<PolyathlonCompetition.Web.Models.Competition>
+
+@{
+    ViewData["Title"] = "Соревнования";
+}
+
+<h2>@(ViewData["Title"]?.ToString() ?? "Список соревнований")</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Поиск и фильтры -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Search" method="get" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="searchString" class="form-control" placeholder="Поиск по названию, месту..." value="@ViewData["SearchString"]">
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<CompetitionStatus>()">
+                    <option value="">Все статусы</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Поиск</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Навигация -->
+<div class="mb-3">
+    <div class="btn-group" role="group">
+        <a asp-action="Index" class="btn btn-outline-primary">Все</a>
+        <a asp-action="Upcoming" class="btn btn-outline-success">Предстоящие</a>
+        <a asp-action="Completed" class="btn btn-outline-secondary">Завершенные</a>
+    </div>
+    
+    @if (User.IsInRole("Admin") || User.IsInRole("Organizer"))
+    {
+        <a asp-action="Create" class="btn btn-success float-end">Создать соревнование</a>
+    }
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Дата</th>
+            <th>Место</th>
+            <th>Участники</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Date.ToString("dd.MM.yyyy")</td>
+                <td>@item.Location</td>
+                <td>
+                    <span class="badge bg-info">@(item.CompetitionRegistrations?.Count ?? 0)</span>
+                </td>
+                <td>
+                    <span class="badge @GetStatusBadgeClass(item.Status)">@item.Status</span>
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Подробности</a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Organizer"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Редактировать</a>
+                            <a asp-action="Statistics" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Статистика</a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <h4>Соревнования не найдены</h4>
+        <p>По вашему запросу не найдено ни одного соревнования.</p>
+        @if (User.IsInRole("Admin") || User.IsInRole("Organizer"))
+        {
+            <a asp-action="Create" class="btn btn-success">Создать первое соревнование</a>
+        }
+    </div>
+}
+
+@functions {
+    private string GetStatusBadgeClass(CompetitionStatus status)
+    {
+        return status switch
+        {
+            CompetitionStatus.Planned => "bg-secondary",
+            CompetitionStatus.RegistrationOpen => "bg-primary",
+            CompetitionStatus.Ongoing => "bg-warning",
+            CompetitionStatus.Completed => "bg-success",
+            CompetitionStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

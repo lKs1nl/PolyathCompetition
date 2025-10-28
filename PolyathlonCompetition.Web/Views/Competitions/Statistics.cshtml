@@ -1,0 +1,83 @@
+@model PolyathlonCompetition.Web.Controllers.CompetitionStatisticsViewModel
+
+@{
+    ViewData["Title"] = "Статистика соревнования";
+}
+
+<h2>Статистика: @Model.Competition.Name</h2>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Всего регистраций</h5>
+                <h2 class="card-text">@Model.TotalRegistrations</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Подтверждено</h5>
+                <h2 class="card-text">@Model.ApprovedRegistrations</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Ожидание</h5>
+                <h2 class="card-text">@Model.PendingRegistrations</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Процент подтверждения</h5>
+                <h2 class="card-text">@Model.ApprovalRate.ToString("F1")%</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Teams.Any())
+{
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Команды (@Model.Teams.Count)</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var team in Model.Teams)
+                        {
+                            <li class="list-group-item">@team</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Категории (@Model.Categories.Count)</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <li class="list-group-item">@category</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-action="Details" asp-route-id="@Model.Competition.Id" class="btn btn-secondary">Назад к соревнованию</a>
+    <a asp-controller="Registrations" asp-action="Index" asp-route-competitionId="@Model.Competition.Id" class="btn btn-info">Управление регистрациями</a>
+</div>

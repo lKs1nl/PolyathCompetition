@@ -1,0 +1,57 @@
+@model PolyathlonCompetition.Web.Models.Competition
+
+@{
+    ViewData["Title"] = "Удаление соревнования";
+}
+
+<h2>Удаление соревнования</h2>
+
+<h3>Вы уверены, что хотите удалить это соревнование?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Date.ToString("dd.MM.yyyy")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            <span class="badge @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Назад к списку</a>
+    </form>
+</div>
+
+@functions {
+    private string GetStatusBadgeClass(CompetitionStatus status)
+    {
+        return status switch
+        {
+            CompetitionStatus.Planned => "bg-secondary",
+            CompetitionStatus.Ongoing => "bg-warning",
+            CompetitionStatus.Completed => "bg-success",
+            _ => "bg-secondary"
+        };
+    }
+}
